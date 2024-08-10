@@ -54,3 +54,18 @@ export const columnChanges = [
 
     }
 ]
+
+
+export const tableChanges = [
+    {
+        "type": "COLUMN",
+        "operation": "ADD",
+        "values": { "age": "int", "phn": "varhcar" }
+    },
+    {
+        "type": "ROW",
+        "operation": "DELETE",
+        "values": { "4731055301": 1, "4731055302": 1 }
+    }
+]
+

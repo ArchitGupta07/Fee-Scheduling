@@ -1,0 +1,65 @@
+/* src/Table.css */
+
+/* Import Poppins Font from Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+/* Table Container */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 14px; /* Smaller text size */
+    font-family: 'Poppins', sans-serif; /* Use Poppins font */
+    text-align: center; /* Center align all text */
+}
+
+/* Table Header */
+table th {
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    background-color: #f4f4f4; /* Light grey background for headers */
+    font-weight: 600; /* Bold header text */
+}
+
+/* New Columns Header */
+table th.new-columns {
+    background-color: #67e71d; /* Different background color for new columns */
+    color: #ffffff; /* White text color for new columns */
+}
+
+/* Table Rows */
+table td {
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+}
+
+/* New Column Values */
+table td.new-column-values {
+    background-color: #37e69a; /* Different background color for new column values */
+    color: #ffffff; /* White text color for new column values */
+}
+
+/* New Row Values */
+table td.new-row-values {
+    background-color: #ffff00; /* Yellow background for updated row values */
+}
+
+/* Table Row Hover Effect */
+table tbody tr:hover {
+    background-color: #f1f1f1; /* Slightly darker grey on hover */
+}
+
+/* Zebra Striping for Rows */
+table tbody tr:nth-child(even) {
+    background-color: #f9f9f9; /* Light grey for even rows */
+}
+
+
+table .deleted-column{
+  background-color: red;
+}
+
+.table-heads{
+  font-family: 'Poppins', sans-serif; 
+
+}
