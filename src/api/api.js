@@ -1,4 +1,4 @@
-const BASE_URL = 'https://fee-scheduling-be-architgupta07-architgupta07s-projects.vercel.app';
+const BASE_URL = 'https://fee-scheduling-be.vercel.app';
 // const BASE_URL = 'http://127.0.0.1:8000';
 
 
