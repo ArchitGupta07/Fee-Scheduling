@@ -1,5 +1,5 @@
-// const BASE_URL = 'https://fee-scheduling-be.vercel.app';
- const BASE_URL = 'http://127.0.0.1:8000';
+const BASE_URL = 'https://fee-scheduling-be.vercel.app';
+//  const BASE_URL = 'http://127.0.0.1:8000';
 
 
 export async function UploadFile(formData) {
@@ -106,16 +106,16 @@ export async function DownloadFile(table_name) {
     if (response.ok) {
         const blob = await response.blob();
 
-      // Create a URL for the blob and trigger the download
-      const urlObject = window.URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = urlObject;
-      link.setAttribute('download', `${table_name}.xlsx`); // Filename for the downloaded file
-      document.body.appendChild(link);
-      link.click();
+        // Create a URL for the blob and trigger the download
+        const urlObject = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = urlObject;
+        link.setAttribute('download', `${table_name}.xlsx`); // Filename for the downloaded file
+        document.body.appendChild(link);
+        link.click();
 
-      // Clean up the URL object
-      window.URL.revokeObjectURL(urlObject);
+        // Clean up the URL object
+        window.URL.revokeObjectURL(urlObject);
         // console.log("response...........", res.data);
 
     } else {
