@@ -187,6 +187,10 @@ const Table = () => {
   if (deletedCols) {
     console.log("yooo");
   }
+  async function handleDownload()
+  {
+    await DownloadFile(tableName)
+  }
 
   return (
     <section>
@@ -198,7 +202,7 @@ const Table = () => {
             <button type="submit">Upload</button>
           </form>
         </div>
-        {/* <button onClick={handleDownload}>Download Table</button> */}
+        <button onClick={handleDownload}>Download Table</button>
       </div>
       <div>
         <h2 className="table-heads">MAIN TABLE</h2>

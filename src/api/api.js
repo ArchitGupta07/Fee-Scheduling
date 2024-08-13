@@ -1,5 +1,5 @@
 const BASE_URL = 'https://fee-scheduling-be.vercel.app';
-// const BASE_URL = 'http://127.0.0.1:8000';
+//  const BASE_URL = 'http://127.0.0.1:8000';
 
 
 export async function UploadFile(formData) {
@@ -94,5 +94,32 @@ export async function getMyFiles() {
         console.error("Error fetching uploaded files:", error);
         alert("An error occurred while fetching files.");
         return null;
+    }
+}
+
+export async function DownloadFile(table_name) {
+    const response = await fetch(`${BASE_URL}/files/download/${table_name}`, {
+        method: "GET",
+
+    });
+
+    if (response.ok) {
+        const blob = await response.blob();
+
+      // Create a URL for the blob and trigger the download
+      const urlObject = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = urlObject;
+      link.setAttribute('download', `${tableName}.xlsx`); // Filename for the downloaded file
+      document.body.appendChild(link);
+      link.click();
+
+      // Clean up the URL object
+      window.URL.revokeObjectURL(urlObject);
+        // console.log("response...........", res.data);
+
+    } else {
+        alert("File upload failed."); // Use alert for feedback
+        return null
     }
 }
