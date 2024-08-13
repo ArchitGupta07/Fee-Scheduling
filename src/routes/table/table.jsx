@@ -7,6 +7,7 @@ import { useLocation } from "react-router-dom";
 import SubTable from "../../components/subTable/subTable";
 import { Operations } from "../../lib/enum";
 import { CompareFile } from "../../api/api";
+import { DownloadFile } from "../../api/api";
 // import { cellChanges, columnChanges } from "../../lib/mockData";
 
 const Table = () => {
