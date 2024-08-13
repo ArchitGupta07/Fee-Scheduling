@@ -190,26 +190,35 @@ const Table = () => {
 
   return (
     <section>
-      <div>
-        <h1 className="table-heads">Upload File</h1>
-        <form onSubmit={handleCompare}>
-          <input type="file" onChange={handleFileUpload} />
-          <button type="submit">Upload</button>
-        </form>
+      <div className="action-center">
+        <div>
+          <h1 className="table-heads">Upload File</h1>
+          <form onSubmit={handleCompare}>
+            <input type="file" onChange={handleFileUpload} />
+            <button type="submit">Upload</button>
+          </form>
+        </div>
+        {/* <button onClick={handleDownload}>Download Table</button> */}
       </div>
       <div>
         <h2 className="table-heads">MAIN TABLE</h2>
         <table>
           <thead>
             <tr>
-              {oldColumns.map((key) => (
-                <th
-                  key={key}
-                  className={deletedCols.includes(key) ? "deleted-column" : ""}
-                >
-                  {key.toUpperCase()}
-                </th>
-              ))}
+              {oldColumns.map((key) => {
+                if (key.toLowerCase() !== "hash") {
+                  return (
+                    <th
+                      key={key}
+                      className={
+                        deletedCols.includes(key) ? "deleted-column" : ""
+                      }
+                    >
+                      {key.toUpperCase()}
+                    </th>
+                  );
+                }
+              })}
               {newColumns.map((key) => (
                 <th className="new-columns" key={key}>
                   {key.toUpperCase()}
@@ -221,30 +230,45 @@ const Table = () => {
             {Object.keys(newData).map((rowIndx) => (
               <React.Fragment key={rowIndx}>
                 <tr>
-                  {oldColumns.map((col, idx) => (
-                    <td key={idx}>
-                      {newData[rowIndx][col] !== undefined
-                        ? newData[rowIndx][col]
-                        : ""}
-                    </td>
-                  ))}
-                  {newColumns.map((col, idx) => (
-                    <td className="new-column-values" key={idx}>
-                      {newData[rowIndx][col] !== undefined
-                        ? newData[rowIndx][col]
-                        : ""}
-                    </td>
-                  ))}
+                  {oldColumns.map((col, idx) => {
+                    if (col.toLowerCase() !== "hash") {
+                      return (
+                        <td key={idx}>
+                          {newData[rowIndx][col] !== undefined &&
+                          newData[rowIndx][col] != -1
+                            ? newData[rowIndx][col]
+                            : ""}
+                        </td>
+                      );
+                    }
+                  })}
+                  {newColumns.map((col, idx) => {
+                    if (col.toLowerCase() !== "hash") {
+                      return (
+                        <td className="new-column-values" key={idx}>
+                          {newData[rowIndx][col] !== undefined &&
+                          newData[rowIndx][col] != -1
+                            ? newData[rowIndx][col]
+                            : ""}
+                        </td>
+                      );
+                    }
+                  })}
                 </tr>
                 {updatedRows[rowIndx] && (
                   <tr>
-                    {allColumns.map((col, index) => (
-                      <td className="new-row-values" key={index}>
-                        {updatedRows[rowIndx][col] !== undefined
-                          ? updatedRows[rowIndx][col]
-                          : ""}
-                      </td>
-                    ))}
+                    {allColumns.map((col, index) => {
+                      if (col.toLowerCase() !== "hash") {
+                        return (
+                          <td className="new-row-values" key={index}>
+                            {updatedRows[rowIndx][col] !== undefined &&
+                            updatedRows[rowIndx][col] !== -1
+                              ? updatedRows[rowIndx][col]
+                              : ""}
+                          </td>
+                        );
+                      }
+                    })}
                   </tr>
                 )}
               </React.Fragment>

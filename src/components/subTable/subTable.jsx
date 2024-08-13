@@ -18,6 +18,8 @@ const SubTable = ({ tableType, data }) => {
     setCols(columns);
   }, [data]);
 
+  console.log("data..............", data);
+
   return (
     <table
       className={`custom-table ${
@@ -26,9 +28,11 @@ const SubTable = ({ tableType, data }) => {
     >
       <thead>
         <tr>
-          {Array.from(cols).map((col, indx) => (
-            <th key={indx}>{col.toUpperCase()}</th>
-          ))}
+          {Array.from(cols).map((col, indx) => {
+            if (col.toLowerCase() !== "hash") {
+              return <th key={indx}>{col.toUpperCase()}</th>;
+            }
+          })}
           {/* <th>Hash Value</th>
           <th>Name</th>
           <th>Age</th>
@@ -38,9 +42,13 @@ const SubTable = ({ tableType, data }) => {
       <tbody>
         {Object.entries(data).map(([hash, details]) => (
           <tr key={hash}>
-            {Object.values(details).map((value, indx) => (
-              <th key={indx}>{value}</th>
-            ))}
+            {Object.keys(details).map((key, indx) => {
+              if (key.toLowerCase() !== "hash") {
+                return (
+                  <th key={indx}>{details[key] != -1 ? details[key] : ""}</th>
+                );
+              }
+            })}
             {/* <td>{hash}</td>
             <td>{details.name}</td>
             <td>{details.age}</td>

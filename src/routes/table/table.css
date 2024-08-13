@@ -4,6 +4,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
 
 /* Table Container */
+
+
+
+.action-center{
+    display: flex;
+    justify-content: space-between;
+}
 table {
     width: 100%;
     border-collapse: collapse;
@@ -63,3 +70,4 @@ table .deleted-column{
   font-family: 'Poppins', sans-serif; 
 
 }
+
