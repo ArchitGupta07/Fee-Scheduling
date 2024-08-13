@@ -104,15 +104,23 @@ const Table = () => {
     //     "new_value": 33
     // },
 
+    console.log(cellChanges);
+
     cellChanges?.forEach((cellChange) => {
       const { id, type, row_name, column_name, new_value } = cellChange;
       const rowIndex = row_name; // assuming row_name is 1-based index
+      console.log(new_value);
+      console.log(updatedRowData);
       if (newData[rowIndex]) {
         if (type == Operations.UPDATE) {
           if (newCols.includes(column_name)) {
+            console.log("yo1");
             newData[rowIndex][column_name] = new_value;
           } else {
-            updatedRowData[rowIndex] = {};
+            console.log("yo2", rowIndex, column_name, new_value);
+
+            console.log(updatedRowData);
+            updatedRowData[rowIndex] = updatedRowData[rowIndex] || {};
             updatedRowData[rowIndex][column_name] = new_value;
           }
         } else if (type == Operations.DELETE) {
@@ -126,6 +134,8 @@ const Table = () => {
         }
       }
     });
+
+    console.log("updates rows", updatedRowData);
 
     let columns = [];
     Object.keys(newData).forEach((indx) => {
