@@ -123,3 +123,26 @@ export async function DownloadFile(table_name) {
         return null
     }
 }
+
+
+export async function applyFileChanges(tableName, data) {
+    try {
+        const response = await fetch(`${BASE_URL}/files/update/${tableName}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            alert(`Success: ${data.message}`);
+        } else {
+            const errorData = await response.json();
+            alert(`Error: ${errorData.detail}`);
+        }
+    } catch (error) {
+        console.error("Error updating item:", error);
+    }
+};

@@ -1,0 +1,33 @@
+/* states.css */
+.us-states-section .container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+  }
+  
+  .state-card {
+    border: 1px solid black;
+    border-radius: 1rem;
+    padding: 1rem;
+    background-color: #f0f0f0;
+    box-sizing: border-box;
+    transition: all 0.3s ease;
+    position: relative;
+  }
+  
+  /* Hover effect */
+  .state-card:hover {
+    border-color: transparent;
+    box-shadow: inset 0 0 0 3px #007BFF;
+    background-color: #e0e0e0; /* Optional: change background color on hover */
+  }
+  
+  .state-card h2 {
+    margin: 0 0 10px;
+    font-size: 1.5em;
+  }
+  
+  .state-card p {
+    margin: 5px 0;
+  }
+  

@@ -11,12 +11,27 @@ import {
 
 import Table from "./routes/table/table";
 import Dashboard from "./routes/dashboard/dashboard";
+import States from "./routes/states/states";
+import Categories from "./routes/categories/categories";
+import Fee from "./routes/fee/fee";
 
 function App() {
   const router = createBrowserRouter([
     {
       path: "/",
       element: <Dashboard />,
+    },
+    {
+      path: "/states",
+      element: <States />,
+    },
+    {
+      path: "/states/:stateName",
+      element: <Categories />,
+    },
+    {
+      path: "/fee/:stateName/:disease",
+      element: <Fee />,
     },
     {
       path: "/table",

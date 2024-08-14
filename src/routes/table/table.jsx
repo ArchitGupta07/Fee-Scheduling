@@ -155,9 +155,9 @@ const Table = () => {
     setNewRows(newRowData);
     setDeletedRows(deletedRowsData);
 
-    console.log("columns", columns);
-    console.log("columns", columns);
-    console.log("columns", columns);
+    console.log("columns", newData);
+    console.log("columns", newRowData);
+    console.log("columns", deletedRowsData);
   }, [cellChanges, tableChanges]);
 
   const handleCompare = async (event) => {
@@ -188,9 +188,8 @@ const Table = () => {
   if (deletedCols) {
     console.log("yooo");
   }
-  async function handleDownload()
-  {
-    await DownloadFile(tableName)
+  async function handleDownload() {
+    await DownloadFile(tableName);
   }
 
   return (
@@ -267,7 +266,7 @@ const Table = () => {
                         return (
                           <td className="new-row-values" key={index}>
                             {updatedRows[rowIndx][col] !== undefined &&
-                            updatedRows[rowIndx][col] !== -1
+                            updatedRows[rowIndx][col] != -1
                               ? updatedRows[rowIndx][col]
                               : ""}
                           </td>
