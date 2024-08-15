@@ -2,17 +2,17 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./dashboard.css";
-import { getFileData, getMyFiles, UploadFile } from "../../api/api";
+import { getFileData, getFiles, getMyFiles, UploadFile } from "../../api/api";
 
 const Dashboard = () => {
-  const [allFiles, setAllFiles] = useState([]);
+  const [allFiles, setAllFiles] = useState({});
   const [file, setFile] = useState(null); // Single file state
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const myFiles = await getMyFiles();
+        const myFiles = await getFiles();
         setAllFiles(myFiles);
       } catch (error) {
         alert("An error occurred in fetching uploaded files."); // Use alert for feedback
@@ -23,17 +23,8 @@ const Dashboard = () => {
   }, []);
 
   const goToFile = async (tableName) => {
-    const fileData = await getFileData(tableName);
-
-    const data = Object.entries(fileData.data).reduce(
-      (acc, [hash, details]) => {
-        acc[hash] = { hash, ...details };
-        return acc;
-      },
-      {}
-    );
-
-    navigate("/table", { state: { data, tableName } });
+    // navigate("/table", { state: { data, tableName } });
+    navigate(`/table/${encodeURIComponent(tableName)}`);
   };
 
   const handleFileUpload = (event) => {
@@ -93,12 +84,14 @@ const Dashboard = () => {
           </tr>
         </thead>
         <tbody>
-          {allFiles &&
-            allFiles.map((file, index) => (
+          {Object.keys(allFiles).length > 0 &&
+            Object.keys(allFiles).map((file, index) => (
               <tr key={index}>
-                <td>{file.file_name}</td>
+                <td>{allFiles[file].file_name}</td>
                 <td>
-                  <button onClick={() => handleActionClick(file.table_name)}>
+                  <button
+                    onClick={() => handleActionClick(allFiles[file].table_name)}
+                  >
                     View Table
                   </button>
                 </td>

@@ -1,5 +1,35 @@
-const BASE_URL = 'https://fee-scheduling-be.vercel.app';
-//  const BASE_URL = 'http://127.0.0.1:8000';
+// const BASE_URL = 'https://fee-scheduling-be.vercel.app';
+const BASE_URL = 'http://127.0.0.1:8000';
+
+
+
+export async function getFiles(statename = "new york", category = "dental") {
+    const url = new URL(`${BASE_URL}/files/`);
+    url.searchParams.append('statename', statename);
+    url.searchParams.append('category', category);
+
+
+
+    try {
+        const response = await fetch(url, {
+            method: "GET",
+        });
+
+        if (response.ok) {
+            const res = await response.json();
+            return res.data;
+        } else {
+            alert("Failed to fetch uploaded files.");
+            return null;
+        }
+    } catch (error) {
+        console.error("Error fetching uploaded files:", error);
+        alert("An error occurred while fetching files.");
+        return null;
+    }
+}
+
+
 
 
 export async function UploadFile(formData) {

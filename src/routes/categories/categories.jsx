@@ -10,17 +10,18 @@ const Categories = () => {
   // Get the list of diseases for the state
   console.log(stateName);
 
-  const diseases = stateName ? stateInsuranceCoverage[stateName] : [];
+  const categories = stateName ? stateInsuranceCoverage[stateName] : [];
 
-  const handleViewButton = (disease) => {
+  const handleViewButton = (category) => {
     // navigate(
     //   `/fee/${encodeURIComponent(stateName)}?disease=${encodeURIComponent(
     //     disease.toLowerCase()
     //   )}`
     // );
+    console.log(category, stateName);
     navigate(
       `/fee/${encodeURIComponent(stateName)}/${encodeURIComponent(
-        disease.toLowerCase()
+        category.toLowerCase()
       )}`
     );
   };
@@ -28,7 +29,7 @@ const Categories = () => {
   return (
     <section className="categories-section">
       <div className="categories-table">
-        {diseases.length > 0 ? (
+        {categories.length > 0 ? (
           <table>
             <thead>
               <tr>
@@ -37,15 +38,15 @@ const Categories = () => {
               </tr>
             </thead>
             <tbody>
-              {diseases.map((disease, index) => (
+              {categories.map((category, index) => (
                 <tr key={index}>
-                  <td>{disease}</td>
+                  <td>{category}</td>
                   <td>
                     <button
                       onClick={() => {
                         // Handle file viewing action here
                         // alert(`Viewing file for ${disease} in ${stateName}`);
-                        handleViewButton(disease);
+                        handleViewButton(category);
                       }}
                     >
                       View File

@@ -3,23 +3,24 @@ import React, { useState, useEffect } from "react";
 // import { columnChanges } from "./columnChanges";
 import "./table.css";
 import { cellChanges, columnChanges, tableChanges } from "../../lib/mockData";
-import { useLocation } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import SubTable from "../../components/subTable/subTable";
 import { Operations } from "../../lib/enum";
-import { CompareFile } from "../../api/api";
+import { CompareFile, getFileData } from "../../api/api";
 import { DownloadFile } from "../../api/api";
 // import { cellChanges, columnChanges } from "../../lib/mockData";
 
 const Table = () => {
   // const Table = ({ data }) => {
-  const location = useLocation();
+  // const location = useLocation();
 
-  const { data, tableName } = location.state || {};
-  console.log(tableName);
+  // const { data, tableName } = location.state || {};
+  const { tableName } = useParams();
+  // console.log("table name", tableName);
 
-  const [oldColumns, setOldColumns] = useState(
-    Object.keys(Object.values(data)[0] || {})
-  );
+  const [data, setData] = useState({});
+
+  const [oldColumns, setOldColumns] = useState([]);
   const [allColumns, setAllColumns] = useState([]);
   const [newColumns, setNewColumns] = useState([]);
   const [newData, setNewData] = useState({});
@@ -38,6 +39,33 @@ const Table = () => {
   };
 
   // let deletedCols = [];
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const fileData = await getFileData(tableName);
+
+        const tabledata = Object.entries(fileData.data).reduce(
+          (acc, [hash, details]) => {
+            acc[hash] = { hash, ...details };
+
+            // console.log("acc", hash);
+            return acc;
+          },
+          {}
+        );
+        console.log("filedata", fileData);
+        console.log("tabledata", tabledata);
+        setOldColumns(Object.keys(Object.values(tabledata)[0]));
+        setData(tabledata);
+      } catch (error) {
+        console.log(error);
+        alert("An error occurred in fetching uploaded files."); // Use alert for feedback
+      }
+    };
+
+    fetchData();
+  }, [tableName]);
 
   useEffect(() => {
     const deleteHashes = tableChanges
@@ -155,10 +183,11 @@ const Table = () => {
     setNewRows(newRowData);
     setDeletedRows(deletedRowsData);
 
-    console.log("columns", newData);
-    console.log("columns", newRowData);
-    console.log("columns", deletedRowsData);
-  }, [cellChanges, tableChanges]);
+    console.log("new Data", newData);
+    console.log("new Row Data", newRowData);
+    console.log("Deleted Rows Data", deletedRowsData);
+    console.log("old columns", oldColumns);
+  }, [data, cellChanges, tableChanges]);
 
   const handleCompare = async (event) => {
     event.preventDefault();
@@ -191,6 +220,8 @@ const Table = () => {
   async function handleDownload() {
     await DownloadFile(tableName);
   }
+
+  console.log("new..................", newData);
 
   return (
     <section>

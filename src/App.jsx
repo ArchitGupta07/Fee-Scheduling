@@ -30,11 +30,11 @@ function App() {
       element: <Categories />,
     },
     {
-      path: "/fee/:stateName/:disease",
+      path: "/fee/:stateName/:category",
       element: <Fee />,
     },
     {
-      path: "/table",
+      path: "/table/:tableName",
       element: <Table />,
     },
   ]);

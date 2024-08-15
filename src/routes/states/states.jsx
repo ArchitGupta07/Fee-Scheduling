@@ -11,10 +11,11 @@ const States = () => {
   return (
     <section className="us-states-section">
       <div className="container">
-        {US_States.map((entry) => {
+        {US_States.map((entry, indx) => {
           return (
             <div
               className="state-card"
+              key={indx}
               onClick={() => {
                 handleStateWise(entry.state);
               }}

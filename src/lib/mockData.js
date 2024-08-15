@@ -128,7 +128,7 @@ export const stateInsuranceCoverage = {
     "California": ["Cardiology", "Gastroenterology", "Rheumatology", "Pulmonology"],
     "Texas": ["Cardiology", "Nephrology", "Endocrinology"],
     "Florida": ["Cardiology", "Immunology", "Pulmonology"],
-    "New York": ["Cardiology", "Ophthalmology", "Oncology"],
+    "New York": ["Cardiology", "Ophthalmology", "Oncology", "dental"],
     "Illinois": ["Cardiology", "Hematology", "Orthopedics"],
     "Arizona": ["Dermatology", "Rheumatology"],
     "Nevada": ["Dermatology", "Rheumatology"],
