@@ -1,20 +1,30 @@
+// src/index.jsx
 import React from "react";
-import Table from "./components/Table/Table";
-// import Table from "./Table";
+import ReactDOM from "react-dom";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  createBrowserRouter,
+  RouterProvider,
+} from "react-router-dom";
 
-const App = () => {
-  const users = [
-    { id: 1, name: "Alice", email: "alice@example.com" },
-    { id: 2, name: "Bob", email: "bob@example.com" },
-    { id: 3, name: "Charlie", email: "charlie@example.com" },
-  ];
+import Table from "./routes/table/table";
+import Dashboard from "./routes/dashboard/dashboard";
 
-  return (
-    <div className="App">
-      <h1>User List</h1>
-      <Table data={users} />
-    </div>
-  );
-};
+function App() {
+  const router = createBrowserRouter([
+    {
+      path: "/",
+      element: <Dashboard />,
+    },
+    {
+      path: "/table",
+      element: <Table />,
+    },
+  ]);
+
+  return <RouterProvider router={router} />;
+}
 
 export default App;

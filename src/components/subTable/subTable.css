@@ -1,0 +1,65 @@
+/* Import Poppins Font from Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+/* Table Container */
+.custom-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+  font-size: 16px; /* Smaller text size */
+  font-family: "Poppins", sans-serif; /* Use Poppins font */
+  text-align: center; /* Center align all text */
+}
+
+/* Table Header */
+.custom-table thead tr {
+  background-color: #000000; /* Black header background */
+  color: #630808; /* White text for header */
+  font-weight: bold;
+  font-size: 18px; /* Bold header font size */
+}
+
+/* Table Rows */
+.custom-table tbody tr {
+  border-bottom: 1px solid #cccccc; /* Light grey border */
+  color: #333333; /* Dark grey text color */
+}
+
+.custom-table tbody tr:nth-of-type(even) {
+  background-color: #f5f5f5; /* Light grey even rows */
+}
+
+.custom-table tbody tr:last-of-type {
+  border-bottom: 2px solid #000000; /* Black bottom border */
+}
+
+/* Table Cells */
+.custom-table th,
+.custom-table td {
+  padding: 12px 15px; /* Padding for cells */
+  border-right: 1px solid #cccccc; /* Right border for cells */
+}
+
+.custom-table td:last-child,
+.custom-table th:last-child {
+  border-right: none; /* Remove right border from last column */
+}
+
+/* Hover Effect */
+.custom-table tbody tr:hover {
+  background-color: #e0e0e0; /* Slightly darker grey on hover */
+}
+
+/* Responsive Table */
+@media (max-width: 768px) {
+  .custom-table {
+    font-size: 14px; /* Adjusted for smaller screens */
+  }
+}
+
+/* Custom Styles for DELETE Table Type */
+.custom-table.delete-columns th,
+.custom-table.delete-columns td {
+  background-color: red; /* Red background for cells */
+  color: white; /* White text color for cells */
+}
