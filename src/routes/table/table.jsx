@@ -100,7 +100,7 @@ const Table = () => {
           })
       : [];
 
-    // console.log(newCols);
+    console.log("table changes", tableChanges);
     setNewColumns(newCols);
     setDeletedCols(deleteCols);
 
@@ -138,17 +138,16 @@ const Table = () => {
     cellChanges?.forEach((cellChange) => {
       const { id, type, row_name, column_name, new_value } = cellChange;
       const rowIndex = row_name; // assuming row_name is 1-based index
-      console.log(new_value);
-      console.log(updatedRowData);
+      // console.log(new_value);
+      // console.log(updatedRowData);
       if (newData[rowIndex]) {
         if (type == Operations.UPDATE) {
           if (newCols.includes(column_name)) {
-            console.log("yo1");
             newData[rowIndex][column_name] = new_value;
           } else {
-            console.log("yo2", rowIndex, column_name, new_value);
+            // console.log("yo2", rowIndex, column_name, new_value);
 
-            console.log(updatedRowData);
+            // console.log(updatedRowData);
             updatedRowData[rowIndex] = updatedRowData[rowIndex] || {};
             updatedRowData[rowIndex][column_name] = new_value;
           }
@@ -164,7 +163,7 @@ const Table = () => {
       }
     });
 
-    console.log("updates rows", updatedRowData);
+    // console.log("updates rows", updatedRowData);
 
     let columns = [];
     Object.keys(newData).forEach((indx) => {
@@ -183,10 +182,11 @@ const Table = () => {
     setNewRows(newRowData);
     setDeletedRows(deletedRowsData);
 
-    console.log("new Data", newData);
+    // console.log("new Data", newData);
+    // console.log("cell changes ", cellChanges);
     console.log("new Row Data", newRowData);
-    console.log("Deleted Rows Data", deletedRowsData);
-    console.log("old columns", oldColumns);
+    // console.log("Deleted Rows Data", deletedRowsData);
+    // console.log("old columns", oldColumns);
   }, [data, cellChanges, tableChanges]);
 
   const handleCompare = async (event) => {
@@ -205,23 +205,19 @@ const Table = () => {
       const res = await CompareFile(formData, tableName);
       setCellChanges(res?.data.cell_changes);
       setTableChanges(res?.data.table_changes);
-      console.log("cell Chnages", cellChanges);
-      console.log("Table changes", tableChanges);
+      // console.log("cell Chnages", cellChanges);
+      // console.log("Table changes", tableChanges);
     } catch (error) {
       console.error(error);
       alert("An error occurred while uploading the file."); // Use alert for feedback
     }
   };
 
-  console.log(deletedRows);
-  if (deletedCols) {
-    console.log("yooo");
-  }
   async function handleDownload() {
     await DownloadFile(tableName);
   }
 
-  console.log("new..................", newData);
+  // console.log("new..................", newData);
 
   return (
     <section>
