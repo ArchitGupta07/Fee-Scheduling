@@ -19,7 +19,7 @@ function App() {
   const router = createBrowserRouter([
     {
       path: "/",
-      element: <Dashboard />,
+      element: <States />,
     },
     {
       path: "/states",
