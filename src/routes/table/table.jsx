@@ -6,17 +6,22 @@ import { cellChanges, columnChanges, tableChanges } from "../../lib/mockData";
 import { useLocation, useParams } from "react-router-dom";
 import SubTable from "../../components/subTable/subTable";
 import { Operations } from "../../lib/enum";
-import { CompareFile, getFileData } from "../../api/api";
+import {
+  applyFileChanges,
+  CompareFile,
+  getFileData,
+  getNewChanges,
+} from "../../api/api";
 import { DownloadFile } from "../../api/api";
 // import { cellChanges, columnChanges } from "../../lib/mockData";
 
 const Table = () => {
-  // const Table = ({ data }) => {
-  // const location = useLocation();
-
-  // const { data, tableName } = location.state || {};
   const { tableName } = useParams();
-  // console.log("table name", tableName);
+
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const id = queryParams.get("id");
+  const isapproved = queryParams.get("isapproved") === "true";
 
   const [data, setData] = useState({});
 
@@ -32,6 +37,8 @@ const Table = () => {
   const [deletedCols, setDeletedCols] = useState([]);
 
   const [file, setFile] = useState(null); // Single file state
+  console.log(id, isapproved);
+  console.log(cellChanges);
 
   const handleFileUpload = (event) => {
     const uploadedFile = event.target.files[0]; // Get the first uploaded file
@@ -43,7 +50,8 @@ const Table = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const fileData = await getFileData(tableName);
+        const fileData = await getFileData(tableName, id);
+        // console.log("isapproved", isapproved);
 
         const tabledata = Object.entries(fileData.data).reduce(
           (acc, [hash, details]) => {
@@ -54,9 +62,10 @@ const Table = () => {
           },
           {}
         );
-        console.log("filedata", fileData);
-        console.log("tabledata", tabledata);
-        setOldColumns(Object.keys(Object.values(tabledata)[0]));
+
+        // setOldColumns(Object.keys(Object.values(tabledata)[0]));
+        // console.log(fileData.active_columns);
+        setOldColumns(fileData.active_columns);
         setData(tabledata);
       } catch (error) {
         console.log(error);
@@ -64,43 +73,79 @@ const Table = () => {
       }
     };
 
+    const updateCellChanges = async () => {
+      console.log("ID before condition:", typeof id);
+      if (id !== "undefined" && id !== null && !isapproved) {
+        console.log("Unapproved");
+        const unapprovedChanges = await getNewChanges(id);
+        console.log(unapprovedChanges);
+        setCellChanges(unapprovedChanges.cell_changes);
+        setTableChanges(unapprovedChanges.table_changes);
+      }
+    };
+
     fetchData();
+    updateCellChanges();
   }, [tableName]);
 
   useEffect(() => {
+    console.log("cell changes triggered");
+    console.log(tableChanges);
     const deleteHashes = tableChanges
       ? tableChanges
           .filter(
             (entry) =>
-              entry.type === "ROW" && entry.operation === Operations.DELETE
+              entry.type === "ROW" && entry.operations === Operations.DELETE
           )
-          .flatMap((entry) => Object.keys(JSON.parse(entry.values)))
+          .flatMap((entry) => {
+            try {
+              // Attempt to parse the values and extract column names
+              return Object.keys(JSON.parse(entry.values));
+            } catch (error) {
+              console.error("Error parsing JSON:", error);
+              // Fallback approach if parsing fails
+              return Object.keys(entry.values);
+            }
+          })
       : [];
 
     const newCols = tableChanges
       ? tableChanges
           .filter(
             (change) =>
-              change.type === "COLUMN" && change.operation === Operations.ADD
+              change.type === "COLUMN" && change.operations === Operations.ADD
           )
           .flatMap((change) => {
-            // console.log(Object.keys(JSON.parse(change.values)));
-            return Object.keys(JSON.parse(change.values));
+            try {
+              // Attempt to parse the values and extract column names
+              return Object.keys(JSON.parse(change.values));
+            } catch (error) {
+              console.error("Error parsing JSON:", error);
+              // Fallback approach if parsing fails
+              return Object.keys(change.values);
+            }
           })
       : [];
     const deleteCols = tableChanges
       ? tableChanges
           .filter(
             (change) =>
-              change.type === "COLUMN" && change.operation === Operations.DELETE
+              change.type === "COLUMN" &&
+              change.operations === Operations.DELETE
           )
           .flatMap((change) => {
-            // console.log(Object.keys(JSON.parse(change.values)));
-            return Object.keys(JSON.parse(change.values));
+            try {
+              // Attempt to parse the values and extract column names
+              return Object.keys(JSON.parse(change.values));
+            } catch (error) {
+              console.error("Error parsing JSON:", error);
+              // Fallback approach if parsing fails
+              return Object.keys(change.values);
+            }
           })
       : [];
 
-    console.log("table changes", tableChanges);
+    // console.log("table changes", tableChanges);
     setNewColumns(newCols);
     setDeletedCols(deleteCols);
 
@@ -133,10 +178,13 @@ const Table = () => {
     //     "new_value": 33
     // },
 
-    console.log(cellChanges);
+    console.log("cell.............", cellChanges);
 
     cellChanges?.forEach((cellChange) => {
-      const { id, type, row_name, column_name, new_value } = cellChange;
+      const { operations, row_name, column_name, new_value } = cellChange;
+
+      // console.log(operations, row_name);
+      const type = operations;
       const rowIndex = row_name; // assuming row_name is 1-based index
       // console.log(new_value);
       // console.log(updatedRowData);
@@ -176,15 +224,19 @@ const Table = () => {
         });
       }
     });
-    setAllColumns(columns);
+
+    const uniqueColumns = [...new Set(columns)];
+    setAllColumns(uniqueColumns);
     setNewData(newData);
     setUpdatedRows(updatedRowData);
     setNewRows(newRowData);
     setDeletedRows(deletedRowsData);
 
+    // console.log("updated rows", updatedRows);
+
     // console.log("new Data", newData);
     // console.log("cell changes ", cellChanges);
-    console.log("new Row Data", newRowData);
+    // console.log("new Row Data", newRowData);
     // console.log("Deleted Rows Data", deletedRowsData);
     // console.log("old columns", oldColumns);
   }, [data, cellChanges, tableChanges]);
@@ -193,20 +245,17 @@ const Table = () => {
     event.preventDefault();
 
     if (!file) {
-      alert("Please select a file to upload."); // Use alert for feedback
+      alert("Please select a file to upload.");
       return;
     }
 
     const formData = new FormData();
-    formData.append("cmp_file", file); // Append the selected file
-    // console.log("file....", file);
-    // console.log("formdata....", formData);
+    formData.append("cmp_file", file);
+
     try {
       const res = await CompareFile(formData, tableName);
       setCellChanges(res?.data.cell_changes);
       setTableChanges(res?.data.table_changes);
-      // console.log("cell Chnages", cellChanges);
-      // console.log("Table changes", tableChanges);
     } catch (error) {
       console.error(error);
       alert("An error occurred while uploading the file."); // Use alert for feedback
@@ -219,6 +268,20 @@ const Table = () => {
 
   // console.log("new..................", newData);
 
+  const applyChanges = async () => {
+    console.log(Object.keys(deletedRows), deletedCols, newColumns);
+    try {
+      const fileData = await applyFileChanges(
+        tableName,
+        deletedCols,
+        newColumns
+      );
+    } catch (error) {
+      console.log(error);
+      alert("An error occurred in applying uploaded file changes."); // Use alert for feedback
+    }
+  };
+
   return (
     <section>
       <div className="action-center">
@@ -230,6 +293,7 @@ const Table = () => {
           </form>
         </div>
         <button onClick={handleDownload}>Download Table</button>
+        <button onClick={applyChanges}>Apply Changes</button>
       </div>
       <div>
         <h2 className="table-heads">MAIN TABLE</h2>
@@ -289,7 +353,9 @@ const Table = () => {
                 {updatedRows[rowIndx] && (
                   <tr>
                     {allColumns.map((col, index) => {
+                      // console.log(allColumns);
                       if (col.toLowerCase() !== "hash") {
+                        // console.log(rowIndx, col, updatedRows[rowIndx][col]);
                         return (
                           <td className="new-row-values" key={index}>
                             {updatedRows[rowIndx][col] !== undefined &&

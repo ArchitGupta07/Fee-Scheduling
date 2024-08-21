@@ -33,14 +33,19 @@ export async function getFiles(statename = "new york", category = "dental") {
 
 
 export async function UploadFile(formData) {
+
+
+    console.log(formData)
     const response = await fetch(`${BASE_URL}${"/files/upload"}`, {
         method: "POST",
         body: formData,
     });
 
+
+
     if (response.ok) {
         const res = await response.json();
-        // console.log("response...........", res.data);
+        console.log("response...........", res.data);
         return res
 
     } else {
@@ -69,10 +74,10 @@ export async function CompareFile(formData, tableName) {
     }
 }
 
-export async function getFileData(tableName) {
+export async function getFileData(tableName, id) {
 
     try {
-        const response = await fetch(`${BASE_URL}/files/file-data/${tableName}`, {
+        const response = await fetch(`${BASE_URL}/files/file-data/${tableName}/${id}`, {
             method: "GET",
         });
 
@@ -90,24 +95,6 @@ export async function getFileData(tableName) {
     }
 }
 export async function getMyFiles() {
-    // {
-    //     "data": [
-    //       {
-    //         "table_name": "demo7_20240809_172209",
-    //         "file_name": "Demo7.xlsx"
-    //       },
-    //       {
-    //         "table_name": "demo100_20240810_224735",
-    //         "file_name": "demo100.xlsx"
-    //       },
-    //       {
-    //         "table_name": "demo100_20240810_225229",
-    //         "file_name": "demo100.xlsx"
-    //       }
-    //     ]
-    //   }
-
-
     try {
         const response = await fetch(`${BASE_URL}/files`, {
             method: "GET",
@@ -123,6 +110,26 @@ export async function getMyFiles() {
     } catch (error) {
         console.error("Error fetching uploaded files:", error);
         alert("An error occurred while fetching files.");
+        return null;
+    }
+}
+export async function getNewChanges(id) {
+    try {
+        const response = await fetch(`${BASE_URL}/files/get_cell_changes/${id}`, {
+            method: "GET",
+        });
+
+        if (response.ok) {
+            const res = await response.json();
+            // console.log(res.data)
+            return res;
+        } else {
+            alert("Failed to fetch cell changes.");
+            return null;
+        }
+    } catch (error) {
+        console.error("Error fetching cell changes:", error);
+        alert("An error occurred while fetching cell changes.");
         return null;
     }
 }
@@ -155,7 +162,29 @@ export async function DownloadFile(table_name) {
 }
 
 
-export async function applyFileChanges(tableName, data) {
+
+// export async function applyFileChanges(tableName, data) {
+//     try {
+//         const response = await fetch(`${BASE_URL}/files/update/${tableName}`, {
+//             method: "PUT",
+//             headers: {
+//                 "Content-Type": "application/json",
+//             },
+//             body: JSON.stringify(data),
+//         });
+
+//         if (response.ok) {
+//             const data = await response.json();
+//             alert(`Success: ${data.message}`);
+//         } else {
+//             const errorData = await response.json();
+//             alert(`Error: ${errorData.detail}`);
+//         }
+//     } catch (error) {
+//         console.error("Error updating item:", error);
+//     }
+// };
+export async function getActiveTableCols(tableName) {
     try {
         const response = await fetch(`${BASE_URL}/files/update/${tableName}`, {
             method: "PUT",
@@ -175,4 +204,34 @@ export async function applyFileChanges(tableName, data) {
     } catch (error) {
         console.error("Error updating item:", error);
     }
+};
+
+
+
+export async function applyFileChanges(tableName, newColumns, deletedCols) {
+    const data = {
+        newColumns: newColumns,
+        deletedCols: deletedCols
+    };
+
+    try {
+        const response = await fetch(`${BASE_URL}/files/update/${tableName}`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+        });
+
+        if (response.ok) {
+            const result = await response.json();
+            alert(`Success: ${result.message}`);
+        } else {
+            const errorData = await response.json();
+            alert(`Error: ${errorData.detail}`);
+        }
+    } catch (error) {
+        console.error("Error updating item:", error);
+    }
+
 };
